@@ -7,11 +7,11 @@
 using namespace std;
 float time_spent_mean_yes = 0, age_mean_yes = 0, income_mean_yes = 0, internet_usage_mean_yes = 0;
 float time_spent_sd_yes = 0, age_sd_yes = 0, income_sd_yes = 0, internet_usage_sd_yes = 0;
-float time_spent_pdf_yes = 0, age_pdf_yes = 0, income_pdf_yes = 0, internet_usage_pdf_yes = 0;
+float time_spent_pdf = 0, age_pdf = 0, income_pdf = 0, internet_usage_pdf = 0;
 
 float time_spent_mean_no = 0, age_mean_no = 0, income_mean_no = 0, internet_usage_mean_no = 0;
 float time_spent_sd_no = 0, age_sd_no = 0, income_sd_no = 0, internet_usage_sd_no = 0;
-float time_spent_pdf_no = 0, age_pdf_no = 0, income_pdf_no = 0, internet_usage_pdf_no = 0;
+//float time_spent_pdf_no = 0, age_pdf_no = 0, income_pdf_no = 0, internet_usage_pdf_no = 0;
 
 // Read the Data from the file 
 	// as String Vector 
@@ -55,7 +55,7 @@ void read_record(string data_name)
     }
 } 
 
-void calculation(vector<float>rows, float time_spent_mean,float age_mean, float income_mean, float internet_usage_mean,float time_spent_sd,float age_sd,float income_sd, float internet_usage_sd )
+void calculation(vector<float>rows, float &time_spent_mean,float &age_mean, float &income_mean, float &internet_usage_mean,float &time_spent_sd, float &age_sd, float &income_sd, float &internet_usage_sd )
 {
     for(int i=0;i<rows.size();i++)
     {
@@ -87,9 +87,9 @@ void calculation(vector<float>rows, float time_spent_mean,float age_mean, float 
 	internet_usage_sd = sqrt (internet_usage_sd / n );
 
 }
-/*void make_prediction(float time, float age, float income, float internet_usage)
+float make_prediction(float time, float age, float income, float internet_usage, float time_spent_mean,float age_mean, float income_mean, float internet_usage_mean,float time_spent_sd,float age_sd,float income_sd, float internet_usage_sd)
 {
-	float val ;
+	float val, res;
 	val = ( ( time - time_spent_mean ) * ( time - time_spent_mean ) ) / (2 * (time_spent_sd * time_spent_sd) );
 	time_spent_pdf = (1 / (sqrt (2 * 3.1428) * time_spent_sd) ) * exp( -1*val);
     //cout<<val<<" "<<exp(-1* val)<<" "<<(1 /( sqrt (2 * 3.1428)  * time_spent_sd ));
@@ -105,15 +105,27 @@ void calculation(vector<float>rows, float time_spent_mean,float age_mean, float 
 	val = ( ( internet_usage - internet_usage_mean ) * ( internet_usage - internet_usage_mean ) ) / (2 * (internet_usage_sd * internet_usage_sd) );
 	internet_usage_pdf = (1 / (sqrt (2 * 3.1428)) * internet_usage_sd ) * exp( -1*val);
 
-}*/
+    res=time_spent_pdf;
+//	cout<<res;
+	return res;
+
+}
 
 void splitting_classes()
 {
     for(int i=4 ;i<row.size();i+=5)
    {
+	   int j,ind=i;
 	   if(stoi(row[i]) == 1)
 	   {
-		   row_yes.push_back( stof (row[i]) );
+		   for(j=4;j>=1;j--)
+		   {
+             row_yes.push_back( stof (row[ind-j]) );
+			 //cout<<ind-j<< " ";
+			 //cout<<row_yes[ind-j]<<" ";
+		   }
+		   //cout<<"\n";
+		  // cout<<row_yes[i-j]<<" ";
 	   }
 	   else if(stoi(row[i]) == 0)
 	   {
@@ -121,19 +133,29 @@ void splitting_classes()
 	   }
 	   
    }
+   for(int i=0;i<row_yes.size();i++)
+  {
+	  cout<<row_yes[i]<<"  ";
+  }
 }
 int main()
 {
     string s = "data.csv";
-    //cin>>s;
+    float yes, no;
     read_record(s);
 	splitting_classes();
-    calculation(row_yes, time_spent_mean_yes, age_mean_yes, income_mean_yes, internet_usage_mean_yes, time_spent_sd_yes, age_sd_yes,income_sd_yes, internet_usage_sd_yes);
-    calculation(row_no, time_spent_mean_no, age_mean_no, income_mean_no, internet_usage_mean_no, time_spent_sd_no, age_sd_no,income_sd_no, internet_usage_sd_no);
-//	make_prediction(1,1,1,1);
+  //  calculation(row_yes, time_spent_mean_yes, age_mean_yes, income_mean_yes, internet_usage_mean_yes, time_spent_sd_yes, age_sd_yes,income_sd_yes, internet_usage_sd_yes);
+  ///  calculation(row_no, time_spent_mean_no, age_mean_no, income_mean_no, internet_usage_mean_no, time_spent_sd_no, age_sd_no,income_sd_no, internet_usage_sd_no);
+	//yes = make_prediction(1,1,1,1, time_spent_mean_yes, age_mean_yes, income_mean_yes, internet_usage_mean_yes, time_spent_sd_yes, age_sd_yes,income_sd_yes, internet_usage_sd_yes);
 	//cout<< time_spent_mean<<" "<<time_spent_sd<<" "<<time_spent_pdf;
    /// cout<< exp(-0.5);
-
+ // cout<< time_spent_mean_yes<< age_mean_yes<< income_mean_yes<< internet_usage_mean_yes<< time_spent_sd_yes<< age_sd_yes<<income_sd_yes<< internet_usage_sd_yes<<"\n";
+ // cout<<time_spent_mean_no<< age_mean_no<< income_mean_no<< internet_usage_mean_no<< time_spent_sd_no<< age_sd_no<<income_sd_no<< internet_usage_sd_no;
+  for(int i=0;i<row_yes.size();i++)
+  {
+	  //cout<<row_yes[i];
+  }
   
+   //cout<<yes;
     return 0;
 }
