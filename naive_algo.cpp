@@ -15,7 +15,9 @@ float time_spent_pdf_no = 0, age_pdf_no = 0, income_pdf_no = 0, internet_usage_p
 
 // Read the Data from the file 
 	// as String Vector 
-	vector <string> row; 
+	vector <string> row;
+	vector <float> row_yes;
+	vector <float> row_no; 
 void read_record(string data_name) 
 { 
 
@@ -53,29 +55,29 @@ void read_record(string data_name)
     }
 } 
 
-void calculation()
+void calculation(vector<float>rows, float time_spent_mean,float age_mean, float income_mean, float internet_usage_mean,float time_spent_sd,float age_sd,float income_sd, float internet_usage_sd )
 {
-    for(int i=0;i<row.size();i++)
+    for(int i=0;i<rows.size();i++)
     {
-        time_spent_mean += stof(row[i]);
-        age_mean += stof(row[i+1]);
-        income_mean += stof(row[i+2]);
-        internet_usage_mean += stof(row[i+3]);
+        time_spent_mean += rows[i];
+        age_mean += rows[i+1];
+        income_mean += rows[i+2];
+        internet_usage_mean += rows[i+3];
         i+=4;
     }
     
-	int n = sqrt(row.size () );
+	int n = rows.size ();
     time_spent_mean /= n;
     age_mean /= n;
     income_mean /= n;
     internet_usage_mean /= n;
 
-	for(int i = 0; i < row.size(); i++)
+	for(int i = 0; i < rows.size(); i++)
 	{
-      time_spent_sd += ( stof (row[i]) - time_spent_mean)*( stof (row[i]) - time_spent_mean);
-	  age_sd += ( stof (row[i+1]) - age_mean)*( stof (row[i+1]) - age_mean);
-	  income_sd += ( stof (row[i+2]) - income_mean)*( stof (row[i+2]) - income_mean);
-	  internet_usage_sd += ( stof (row[i+3]) - internet_usage_mean)*( stof (row[i+3]) - internet_usage_mean);
+      time_spent_sd += ( rows[i] - time_spent_mean)*( rows[i] - time_spent_mean);
+	  age_sd += ( rows[i+1] - age_mean)*( rows[i+1] - age_mean);
+	  income_sd += ( rows[i+2] - income_mean)*( rows[i+2] - income_mean);
+	  internet_usage_sd += ( rows[i+3] - internet_usage_mean)*( rows[i+3] - internet_usage_mean);
 	  i+=4;
 	}
 
@@ -85,7 +87,7 @@ void calculation()
 	internet_usage_sd = sqrt (internet_usage_sd / n );
 
 }
-void make_prediction(float time, float age, float income, float internet_usage)
+/*void make_prediction(float time, float age, float income, float internet_usage)
 {
 	float val ;
 	val = ( ( time - time_spent_mean ) * ( time - time_spent_mean ) ) / (2 * (time_spent_sd * time_spent_sd) );
@@ -103,15 +105,35 @@ void make_prediction(float time, float age, float income, float internet_usage)
 	val = ( ( internet_usage - internet_usage_mean ) * ( internet_usage - internet_usage_mean ) ) / (2 * (internet_usage_sd * internet_usage_sd) );
 	internet_usage_pdf = (1 / (sqrt (2 * 3.1428)) * internet_usage_sd ) * exp( -1*val);
 
+}*/
+
+void splitting_classes()
+{
+    for(int i=4 ;i<row.size();i+=5)
+   {
+	   if(stoi(row[i]) == 1)
+	   {
+		   row_yes.push_back( stof (row[i]) );
+	   }
+	   else if(stoi(row[i]) == 0)
+	   {
+		   row_no.push_back( stof (row[i]) );
+	   }
+	   
+   }
 }
 int main()
 {
     string s = "data.csv";
     //cin>>s;
     read_record(s);
-   // calculation();
+	splitting_classes();
+    calculation(row_yes, time_spent_mean_yes, age_mean_yes, income_mean_yes, internet_usage_mean_yes, time_spent_sd_yes, age_sd_yes,income_sd_yes, internet_usage_sd_yes);
+    calculation(row_no, time_spent_mean_no, age_mean_no, income_mean_no, internet_usage_mean_no, time_spent_sd_no, age_sd_no,income_sd_no, internet_usage_sd_no);
 //	make_prediction(1,1,1,1);
 	//cout<< time_spent_mean<<" "<<time_spent_sd<<" "<<time_spent_pdf;
    /// cout<< exp(-0.5);
+
+  
     return 0;
 }
