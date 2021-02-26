@@ -5,9 +5,9 @@ echo -e "IMPLEMENTATION OF NAIVE BAYES ALGORITHM\n\n"
 
 function ask_data
 {
-   echo -e "Daily time spent"
-   read time_spent
-   echo -e $time_spent >> user_input.txt
+   dialog --inputbox "Enter daily time spent" 10 20 2>user_input.txt
+   echo -e "\n" 2>> user_input.txt
+   
    echo -e "Age"
    read age
    echo -e $age >>user_input.txt
