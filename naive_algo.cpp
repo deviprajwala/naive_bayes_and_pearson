@@ -5,20 +5,27 @@
 #include <bits/stdc++.h>
 
 using namespace std;
+void read_record(string data_name);
+void calculation(vector<float>rows, float &time_spent_mean,float &age_mean, float &income_mean, float &internet_usage_mean,float &time_spent_sd, float &age_sd, float &income_sd, float &internet_usage_sd );
+float make_prediction(float time, float age, float income, float internet_usage, float time_spent_mean,float age_mean, float income_mean, float internet_usage_mean,float time_spent_sd,float age_sd,float income_sd, float internet_usage_sd);
+void splitting_classes();
+
+
 float time_spent_mean_yes = 0, age_mean_yes = 0, income_mean_yes = 0, internet_usage_mean_yes = 0;
 float time_spent_sd_yes = 0, age_sd_yes = 0, income_sd_yes = 0, internet_usage_sd_yes = 0;
 float time_spent_pdf = 0, age_pdf = 0, income_pdf = 0, internet_usage_pdf = 0;
-
 float time_spent_mean_no = 0, age_mean_no = 0, income_mean_no = 0, internet_usage_mean_no = 0;
 float time_spent_sd_no = 0, age_sd_no = 0, income_sd_no = 0, internet_usage_sd_no = 0;
-//float time_spent_pdf_no = 0, age_pdf_no = 0, income_pdf_no = 0, internet_usage_pdf_no = 0;
 
-// Read the Data from the file 
-	// as String Vector 
-	vector <string> row;
-	vector <float> row_yes;
-	vector <float> row_no; 
+
+ 
+vector <string> row;
+vector <float> row_yes;
+vector <float> row_no; 
+
 void read_record(string data_name) 
+   // Read the Data from the file 
+	// as String Vector
 { 
 
 	// File pointer 
@@ -107,7 +114,7 @@ float make_prediction(float time, float age, float income, float internet_usage,
 	val = ( ( internet_usage - internet_usage_mean ) * ( internet_usage - internet_usage_mean ) ) / (2 * (internet_usage_sd * internet_usage_sd) );
 	internet_usage_pdf = (1 / (sqrt (2 * 3.1428)) * internet_usage_sd ) * exp( -1*val);
 
-    res=time_spent_pdf;
+    res = time_spent_pdf * age_pdf * income_pdf * internet_usage_pdf;
 //	cout<<res;
 	return res;
 
@@ -153,17 +160,22 @@ int main()
 	splitting_classes();
     calculation(row_yes, time_spent_mean_yes, age_mean_yes, income_mean_yes, internet_usage_mean_yes, time_spent_sd_yes, age_sd_yes,income_sd_yes, internet_usage_sd_yes);
     calculation(row_no, time_spent_mean_no, age_mean_no, income_mean_no, internet_usage_mean_no, time_spent_sd_no, age_sd_no,income_sd_no, internet_usage_sd_no);
-	//yes = make_prediction(1,1,1,1, time_spent_mean_yes, age_mean_yes, income_mean_yes, internet_usage_mean_yes, time_spent_sd_yes, age_sd_yes,income_sd_yes, internet_usage_sd_yes);
+	yes = make_prediction(2,23,10000,30, time_spent_mean_yes, age_mean_yes, income_mean_yes, internet_usage_mean_yes, time_spent_sd_yes, age_sd_yes,income_sd_yes, internet_usage_sd_yes);
+	no = make_prediction(2,23,10000,30,time_spent_mean_no,age_mean_no,income_mean_no,internet_usage_mean_no,time_spent_sd_no,age_sd_no,income_sd_no,internet_usage_sd_no);
 	//cout<< time_spent_mean<<" "<<time_spent_sd<<" "<<time_spent_pdf;
    /// cout<< exp(-0.5);
-  cout<< time_spent_mean_yes<<" "<< age_mean_yes<<" "<< income_mean_yes<<" "<< internet_usage_mean_yes<<" "<< time_spent_sd_yes<<" "<< age_sd_yes<<" "<<income_sd_yes<<" "<< internet_usage_sd_yes<<"\n";
-  cout<<time_spent_mean_no<<" "<< age_mean_no<<" "<< income_mean_no<<" "<< internet_usage_mean_no<<" "<< time_spent_sd_no<<" "<< age_sd_no<<" "<<income_sd_no<<" "<< internet_usage_sd_no;
+ // cout<< time_spent_mean_yes<<" "<< age_mean_yes<<" "<< income_mean_yes<<" "<< internet_usage_mean_yes<<" "<< time_spent_sd_yes<<" "<< age_sd_yes<<" "<<income_sd_yes<<" "<< internet_usage_sd_yes<<"\n";
+  //cout<<time_spent_mean_no<<" "<< age_mean_no<<" "<< income_mean_no<<" "<< internet_usage_mean_no<<" "<< time_spent_sd_no<<" "<< age_sd_no<<" "<<income_sd_no<<" "<< internet_usage_sd_no;
  // cout<<"\n";
-  for(int i=0;i<row_yes.size();i++)
-  {
-	 // cout<<row_yes[i];
-  }
-  
-   //cout<<yes;
-    return 0;
+
+   if(yes>no)
+   {
+	   cout<<"yes";
+   }
+   else
+   {
+	   cout<<"no";
+   }
+
+   return 0;
 }
