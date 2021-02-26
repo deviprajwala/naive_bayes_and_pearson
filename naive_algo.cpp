@@ -60,25 +60,27 @@ void calculation(vector<float>rows, float &time_spent_mean,float &age_mean, floa
     for(int i=0;i<rows.size();i++)
     {
         time_spent_mean += rows[i];
+	//	cout<<rows[i]<<" ";
         age_mean += rows[i+1];
         income_mean += rows[i+2];
         internet_usage_mean += rows[i+3];
-        i+=4;
+        i+=3;
     }
-    
-	int n = rows.size ();
+   
+	int n = rows.size ()/4;
     time_spent_mean /= n;
     age_mean /= n;
     income_mean /= n;
     internet_usage_mean /= n;
 
+    
 	for(int i = 0; i < rows.size(); i++)
 	{
       time_spent_sd += ( rows[i] - time_spent_mean)*( rows[i] - time_spent_mean);
 	  age_sd += ( rows[i+1] - age_mean)*( rows[i+1] - age_mean);
 	  income_sd += ( rows[i+2] - income_mean)*( rows[i+2] - income_mean);
 	  internet_usage_sd += ( rows[i+3] - internet_usage_mean)*( rows[i+3] - internet_usage_mean);
-	  i+=4;
+	  i+=3;
 	}
 
 	time_spent_sd = sqrt (time_spent_sd / n );
@@ -129,13 +131,18 @@ void splitting_classes()
 	   }
 	   else if(stoi(row[i]) == 0)
 	   {
-		   row_no.push_back( stof (row[i]) );
+		     for(j=4;j>=1;j--)
+		   {
+             row_no.push_back( stof (row[ind-j]) );
+			 //cout<<ind-j<< " ";
+			 //cout<<row_yes[ind-j]<<" ";
+		   }
 	   }
 	   
    }
    for(int i=0;i<row_yes.size();i++)
   {
-	  cout<<row_yes[i]<<"  ";
+	 // cout<<row_yes[i]<<"  ";
   }
 }
 int main()
@@ -144,16 +151,17 @@ int main()
     float yes, no;
     read_record(s);
 	splitting_classes();
-  //  calculation(row_yes, time_spent_mean_yes, age_mean_yes, income_mean_yes, internet_usage_mean_yes, time_spent_sd_yes, age_sd_yes,income_sd_yes, internet_usage_sd_yes);
-  ///  calculation(row_no, time_spent_mean_no, age_mean_no, income_mean_no, internet_usage_mean_no, time_spent_sd_no, age_sd_no,income_sd_no, internet_usage_sd_no);
+    calculation(row_yes, time_spent_mean_yes, age_mean_yes, income_mean_yes, internet_usage_mean_yes, time_spent_sd_yes, age_sd_yes,income_sd_yes, internet_usage_sd_yes);
+    calculation(row_no, time_spent_mean_no, age_mean_no, income_mean_no, internet_usage_mean_no, time_spent_sd_no, age_sd_no,income_sd_no, internet_usage_sd_no);
 	//yes = make_prediction(1,1,1,1, time_spent_mean_yes, age_mean_yes, income_mean_yes, internet_usage_mean_yes, time_spent_sd_yes, age_sd_yes,income_sd_yes, internet_usage_sd_yes);
 	//cout<< time_spent_mean<<" "<<time_spent_sd<<" "<<time_spent_pdf;
    /// cout<< exp(-0.5);
- // cout<< time_spent_mean_yes<< age_mean_yes<< income_mean_yes<< internet_usage_mean_yes<< time_spent_sd_yes<< age_sd_yes<<income_sd_yes<< internet_usage_sd_yes<<"\n";
- // cout<<time_spent_mean_no<< age_mean_no<< income_mean_no<< internet_usage_mean_no<< time_spent_sd_no<< age_sd_no<<income_sd_no<< internet_usage_sd_no;
+  cout<< time_spent_mean_yes<<" "<< age_mean_yes<<" "<< income_mean_yes<<" "<< internet_usage_mean_yes<<" "<< time_spent_sd_yes<<" "<< age_sd_yes<<" "<<income_sd_yes<<" "<< internet_usage_sd_yes<<"\n";
+  cout<<time_spent_mean_no<<" "<< age_mean_no<<" "<< income_mean_no<<" "<< internet_usage_mean_no<<" "<< time_spent_sd_no<<" "<< age_sd_no<<" "<<income_sd_no<<" "<< internet_usage_sd_no;
+ // cout<<"\n";
   for(int i=0;i<row_yes.size();i++)
   {
-	  //cout<<row_yes[i];
+	 // cout<<row_yes[i];
   }
   
    //cout<<yes;
