@@ -3,7 +3,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-float church_mean = 0, resort_mean = 0, beach_mean = 0, park_mean = 0, theatre_mean = 0, museum_mean = 0, mall_mean = 0, zoo_mean = 0, restaurant_mean = 0, pub_bar_mean = 0;
+ vector < float > mean;
+ vector < float > simili;
+ float new_user_mean;
+ vector < float > new_user;
 
 void read_record( string data_name, vector < vector<float> > &matrix ) 
 //read the Data from the file as String Vector
@@ -14,7 +17,7 @@ void read_record( string data_name, vector < vector<float> > &matrix )
 	fstream fin; 
  
 	// Open an existing file 
-	fin.open (data_name, ios::in); 
+	fin.open (data_name, ios::in);
  
 	string value, word, temp; 
 
@@ -62,43 +65,106 @@ void view_matrix(vector< vector <float> > matrix)
 }
 void calculation_of_mean(vector < vector <float> > matrix)
 {
-    for(int i = 0; i < matrix.size(); i++)
+    int n = matrix[0].size(), i, j;
+    float val=0;
+    for (i=0;i<matrix.size();i++)
     {
-        church_mean += matrix[i][0];
-        resort_mean += matrix[i][1];
-        beach_mean += matrix[i][2];
-        park_mean += matrix[i][3];
-        theatre_mean += matrix[i][4];
-        museum_mean += matrix[i][5];
-        mall_mean += matrix[i][6];
-        zoo_mean += matrix[i][7];
-        restaurant_mean += matrix[i][8];
-        pub_bar_mean += matrix[i][9];
+        for(j=0; j<matrix[i].size();j++)
+        {
+           val+= matrix[i][j];
+        }
+            val/=n;
+            mean.push_back(val);
+            val=0;
     }
-    int n = matrix.size();
-    church_mean /= n;
-    resort_mean /= n;
-    beach_mean /= n;
-    park_mean /= n;
-    theatre_mean /= n;
-    museum_mean /= n;
-    mall_mean /= n;
-    zoo_mean /= n;
-    restaurant_mean /= n;
-    pub_bar_mean /= n;
+}
+void similarity_measure(vector< vector< float> > matrix)
+{
+    int i, j;
+    float val=0, nomi=0, denomi_1=0, denomi_2 =0, denomi;
+    for( i = 0; i < matrix.size(); i++)
+    {
+        for( j = 0; j < matrix[i].size() -1 ; j++)
+        {
+           nomi += ( matrix[i][j] - mean[i] ) * (new_user[j] - new_user_mean );
+          // cout<<matrix[i][j]<<"-"<<mean[i]<<"*"<<new_user[j]<<"-"<<new_user_mean<<"=";
+          // cout<<nomi<<"\n ";
+           denomi_1 +=( matrix[i][j] - mean[i] ) * (matrix[i][j] - mean[i]) ;
+          // cout<<matrix[i][j]<<"-"<<mean[i]<<"*"<<matrix[i][j]<<"-"<<mean[i]<<"="<<denomi_1<<"\n";
+           denomi_2 +=(new_user[j] - new_user_mean ) * (new_user[j] - new_user_mean );
+          // cout<<new_user[j] <<"-"<< new_user_mean<< "*"<< new_user[j] <<"-"<< new_user_mean<<"="<<denomi_2<<"\n";
+        //   cout<<denomi_1<<" "<<denomi_2<<"\n";
+
+        }
+        denomi = sqrt(denomi_1) * sqrt(denomi_2);
+        if( denomi > 0 )
+        {
+        // cout<<denomi<<" "<<denomi_1<<" "<<denomi_2;
+          val = nomi / denomi;
+        }
+        simili.push_back(val);
+        val=0;
+        nomi=0;
+        denomi_1=0;
+        denomi_2 =0;
+    }
+   /* for(int i=0;i<simili.size();i++)
+    {
+        cout<<simili[i]<<" ";
+    }*/
+}
+void get_ratings_for_new_user()
+{
+    int sum=0;
+    float r;
+    cout<<"enter the ratings for churches,resorts,beaches,parks, theatres, museums, malls,zoo,restaurants";
+    for(int i=0;i<9;i++)
+    {
+        cin>>r;
+        new_user.push_back(r);
+        sum+= r;
+    }
+    new_user_mean = sum/9.0;
+}
+void make_prediction( vector < vector <float> > matrix)
+{
+    int max=0, index=0;
+    cout<<"hi";
+
+    for(int i=0;i<simili.size();i++)
+    {
+      if(max <= simili[i])
+      {
+          max= simili[i];
+          index= i;
+      }
+    }
+    if( matrix[index][9] >= 2.5 )
+    {
+        cout<<" Place 10 can be recommended to the user\n";
+    }
+    else
+    {
+        cout<<"User may not like the 10th place\n";
+    }
 }
 int main()
 {
     string s = "ratings.csv";
     //cin>>s;
-    cout<<"hi";
     int rows = 4, cols = 10;
     vector <vector <float> > matrix (rows, vector<float>(cols));
+   
     //cin>>rows>>cols;
     read_record(s,matrix);
-    //view_matrix(matrix);
+    view_matrix(matrix);
     calculation_of_mean(matrix);
-    cout<< church_mean<<" "<<resort_mean<<" "<<beach_mean<<" "<<park_mean<<" "<<theatre_mean<<" "<<museum_mean<<" "<<mall_mean<<" "<<zoo_mean<<" "<<restaurant_mean<<" "<<pub_bar_mean;
-
+   /* for(int i=0;i<mean.size();i++)
+    {
+        cout<<mean.at(i)<<" ";
+    }*/
+    get_ratings_for_new_user();
+    similarity_measure(matrix);
+    make_prediction( matrix) ;
     return 0;
 }
