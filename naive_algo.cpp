@@ -198,11 +198,11 @@ int main()
    if( yes > no )
    //if the probability of class yes is greater than the class no print yes or else print no
    {
-	   cout<<"YES there is high chance of user clicking on th advertise\n";
+	   cout<<"dialog --msgbox \"YES there is high chance of user clicking on th advertise\" 10 30";
    }
    else
    {
-	   cout<<"NO there is low chance of user clicking on th advertise\n";
+	   cout<<"dialog --msgbox \"NO there is low chance of user clicking on th advertise\" 10 30";
    }
 
    return 0;
