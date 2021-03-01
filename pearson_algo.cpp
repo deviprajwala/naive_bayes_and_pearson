@@ -164,7 +164,7 @@ void make_prediction( vector < vector <float> > matrix )
           index = i;
       }
     }
-    if( matrix[index][9] >= 2.5 )
+    if( matrix[index][9] >= 0 )
     //if the rating of the 10th place is greater than or equal to 2.5 then the 10th place is recommended else it is not recommended
     {
         cout<<"dialog --msgbox \" Place 10 can be recommended to the user\" 10 30\n";

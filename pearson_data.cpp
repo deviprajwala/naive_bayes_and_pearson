@@ -53,11 +53,5 @@ void create()
 int main()
 {
     create();
-    cout<<"ratings.csv\n";
-    //name of the csv file
-    cout<<n<<"\n";
-    //number of users
-    cout<<10<<"\n";
-    //number of places
     return 0;
 }

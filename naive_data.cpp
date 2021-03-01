@@ -16,7 +16,10 @@ void create()
 	int i, time_spent, age, income, internet_usage, clicked_on_add;  
 
 	// Read the input 
-	for (i = 0; i < 1; i++) { 
+	int n;
+	cout<<"Enter the number of users :";
+	cin>>n;
+	for (i = 0; i < n; i++) { 
 
 		cin >> time_spent
 			>> age

@@ -1,0 +1,16 @@
+The attributes used in the naive bayes prediction
+sl no Daily Time Spent on Site,Age,Area Income,Daily Internet Usage,Clicked on Ad
+
+
+The attributes used in the pearsons recommendation
+Attribute 1 : Unique user id
+Attribute 2 : Average ratings on churches
+Attribute 3 : Average ratings on resorts
+Attribute 4 : Average ratings on beaches
+Attribute 5 : Average ratings on parks
+Attribute 6 : Average ratings on theatres
+Attribute 7 : Average ratings on museums
+Attribute 8 : Average ratings on malls
+Attribute 9 : Average ratings on zoo
+Attribute 10 : Average ratings on restaurants
+Attribute 11 : Average ratings on pubs/bars
